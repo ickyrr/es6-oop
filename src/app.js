@@ -5,6 +5,10 @@ import {FleetDataService} from './services/fleet-data-service';
 let dataService = new FleetDataService();
 dataService.loadData(fleet);
 
-for(let e of dataService.errors) {
-	console.log(e.message);
-}
+// let car = dataService.getCarByLicense("EFG456");
+
+// let cars = dataService.getCarsSortedByLicense();
+
+let cars = dataService.filterCarsByMake("o");
+
+console.log(cars);

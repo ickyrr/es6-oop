@@ -55,30 +55,13 @@
 	var dataService = new _fleetDataService.FleetDataService();
 	dataService.loadData(_fleetData.fleet);
 
-	var _iteratorNormalCompletion = true;
-	var _didIteratorError = false;
-	var _iteratorError = undefined;
+	// let car = dataService.getCarByLicense("EFG456");
 
-	try {
-		for (var _iterator = dataService.errors[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-			var e = _step.value;
+	// let cars = dataService.getCarsSortedByLicense();
 
-			console.log(e.message);
-		}
-	} catch (err) {
-		_didIteratorError = true;
-		_iteratorError = err;
-	} finally {
-		try {
-			if (!_iteratorNormalCompletion && _iterator.return) {
-				_iterator.return();
-			}
-		} finally {
-			if (_didIteratorError) {
-				throw _iteratorError;
-			}
-		}
-	}
+	var cars = dataService.filterCarsByMake("o");
+
+	console.log(cars);
 
 /***/ },
 /* 1 */
@@ -239,7 +222,7 @@
 	}, {
 		license: 'LKJ354',
 		type: 'car',
-		make: 'toyota',
+		make: 'hyundai',
 		model: 'Toyota 86',
 		miles: '4565',
 		latLong: '234.775594 -56.23465'
@@ -290,7 +273,9 @@
 							case 'car':
 								if (this.validateCarData(data)) {
 									var car = this.loadCar(data);
-									this.cars.push(car);
+									if (car) {
+										this.cars.push(car);
+									}
 								} else {
 									var _e = new _dataError.DataError('Invalid car data', data);
 									this.errors.push(_e);
@@ -373,6 +358,40 @@
 				return !hasErrors;
 			}
 		}, {
+			key: 'validateDroneData',
+			value: function validateDroneData(drone) {
+
+				var requiredProps = "license type model base latLong airTimeHours".split(' ');
+				var hasNoErrors = false;
+
+				var _iteratorNormalCompletion3 = true;
+				var _didIteratorError3 = false;
+				var _iteratorError3 = undefined;
+
+				try {
+					for (var _iterator3 = requiredProps[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+						var field = _step3.value;
+
+						if (!drone[field]) {
+							this.errors.push(new _dataError.DataError('Invalid fields ' + field, drone));
+						}
+					}
+				} catch (err) {
+					_didIteratorError3 = true;
+					_iteratorError3 = err;
+				} finally {
+					try {
+						if (!_iteratorNormalCompletion3 && _iterator3.return) {
+							_iterator3.return();
+						}
+					} finally {
+						if (_didIteratorError3) {
+							throw _iteratorError3;
+						}
+					}
+				}
+			}
+		}, {
 			key: 'loadCar',
 			value: function loadCar(car) {
 				try {
@@ -397,6 +416,35 @@
 					this.errors.push(new _dataError.DataError('error loading drone', drone));
 				}
 				return null;
+			}
+		}, {
+			key: 'getCarByLicense',
+			value: function getCarByLicense(license) {
+				return this.cars.find(function (car) {
+					return car.license === license;
+				});
+			}
+		}, {
+			key: 'getCarsSortedByLicense',
+			value: function getCarsSortedByLicense() {
+				return this.cars.sort(function (car1, car2) {
+
+					if (car1.license < car2.license) {
+						return -1;
+					}
+					if (car1.license > car2.license) {
+						return 1;
+					}
+
+					return 0;
+				});
+			}
+		}, {
+			key: 'filterCarsByMake',
+			value: function filterCarsByMake(filter) {
+				return this.cars.filter(function (car) {
+					return car.make.indexOf(filter) >= 0;
+				});
 			}
 		}]);
 

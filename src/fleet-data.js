@@ -26,7 +26,7 @@ export let fleet = [
 	{
 		license: 'LKJ354',
 		type: 'car',
-		make: 'toyota',
+		make: 'hyundai',
 		model: 'Toyota 86',
 		miles: '4565',
 		latLong: '234.775594 -56.23465',
